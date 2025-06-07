@@ -38,4 +38,4 @@ else
     echo "spice-vdagent installed successfully."
 fi
 
-echo "Kali setup complete at $(date). You’re ready to roll!"
+echo "Kali setup complete at $(date)."
