@@ -57,19 +57,20 @@ if [ -f ~/.zshrc ]; then
     echo "Backed up .zshrc to ~/.zshrc.bak-$(date +%Y%m%d-%H%M%S)"
 fi
 
-# Check if custom prompt already exists to avoid duplicates
+# Remove old custom prompt if it exists, then add new one
 if grep -q "Custom Zsh prompt" ~/.zshrc; then
-    echo "Custom prompt already configured in .zshrc. Skipping..."
-else
-    # Append custom prompt to .zshrc
-    cat << 'EOF' >> ~/.zshrc
+    echo "Removing old custom prompt from .zshrc..."
+    sed -i '/# Custom Zsh prompt/,/\$/d' ~/.zshrc
+fi
+
+# Append custom prompt to .zshrc
+cat << 'EOF' >> ~/.zshrc
 
 # Custom Zsh prompt with date, time, user@host, and cwd
 autoload -Uz add-zsh-hook  # Ensure prompt-related functions are available
-PROMPT='%F{green}[%D{%a %b %d} %T]%f %F{yellow}%n%f@%F{red}%m%f %F{blue}[%~]%f \$ '
+PROMPT='%F{green}[%D{%a %b %d} %T]%f %F{yellow}%n%f@%F{red}%m%f %F{blue}[%~]%f\$ '
 EOF
-    echo "Custom prompt added to .zshrc."
-fi
+echo "Custom prompt added to .zshrc."
 
 # Reload .zshrc if running in Zsh, otherwise inform user
 if [ -n "$ZSH_VERSION" ]; then
@@ -79,6 +80,7 @@ if [ -n "$ZSH_VERSION" ]; then
     fi
 else
     echo "Not running in Zsh. To apply changes, run 'source ~/.zshrc' or switch to Zsh with 'zsh'"
+    echo "To make Zsh your default shell, run 'chsh -s $(which zsh)' and log out/in."
 fi
 
 echo "Kali setup complete at $(date). You’re ready to roll!"
