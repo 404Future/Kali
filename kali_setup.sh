@@ -33,7 +33,7 @@ if dpkg -l | grep -q spice-vdagent; then
 else
     if ! sudo apt install -y spice-vdagent; then
         echo "Error: Failed to install spice-vdagent. Check logs or internet."
-        exit 1
+        exit Cant 1
     fi
     echo "spice-vdagent installed successfully."
 fi
@@ -60,20 +60,22 @@ fi
 # Remove all conflicting prompt settings
 echo "Removing old and conflicting prompt settings from .zshrc..."
 sed -i '/# Custom Zsh prompt/,/\$/d' ~/.zshrc
-sed -i '/configure_prompt()/d' ~/.zshrc
-sed -i '/PROMPT_ALTERNATIVE=/d' ~/.zshrc
+sed -i '/configure_prompt/d' ~/.zshrc
+sed -i '/PROMPT_ALTERNATIVE/d' ~/.zshrc
 sed -i '/START KALI CONFIG VARIABLES/,/STOP KALI CONFIG VARIABLES/d' ~/.zshrc
-sed -i '/prompt_symbol=/d' ~/.zshrc
+sed -i '/prompt_symbol/d' ~/.zshrc
 sed -i '/case "$PROMPT_ALTERNATIVE" in/,/esac/d' ~/.zshrc
 sed -i '/PROMPT=/d' ~/.zshrc
-sed -i '/if \[ "$color_prompt" = yes \] then/,/else/d' ~/.zshrc
+sed -i '/if \[ "$color_prompt" = yes \] then/,/fi/d' ~/.zshrc
 sed -i '/color_prompt=/d' ~/.zshrc
-sed -i '/force_color_prompt=/d' ~/.zshrc
-sed -i '/toggle_oneline_prompt()/d' ~/.zshrc
+sed -i '/force_color_prompt/d' ~/.zshrc
+sed -i '/toggle_oneline_prompt/d' ~/.zshrc
 sed -i '/zle -N toggle_oneline_prompt/d' ~/.zshrc
 sed -i '/bindkey \^P toggle_oneline_prompt/d' ~/.zshrc
+sed -i '/RPROMPT=/d' ~/.zshrc
 
 # Append custom prompt to .zshrc
+echo "Adding custom prompt to .zshrc..."
 cat << 'EOF' >> ~/.zshrc
 
 # Custom Zsh prompt with date, time, user@host, and cwd
@@ -82,11 +84,18 @@ PROMPT='%F{green}[%D{%a %b %d} %T]%f %F{yellow}%n%f@%F{red}%m%f %F{blue}[%~]%f\$
 EOF
 echo "Custom prompt added to .zshrc."
 
+# Fix permissions on .zshrc
+echo "Fixing permissions on .zshrc..."
+chmod 644 ~/.zshrc
+chown $USER:$USER ~/.zshrc
+
 # Reload .zshrc if running in Zsh, otherwise inform user
 if [ -n "$ZSH_VERSION" ]; then
     echo "Reloading Zsh configuration..."
     if ! source ~/.zshrc; then
         echo "Warning: Failed to reload .zshrc. Try manually with 'source ~/.zshrc'"
+    else
+        echo "Current prompt after reload: $PROMPT"
     fi
 else
     echo "Not running in Zsh. To apply changes, run 'source ~/.zshrc' or switch to Zsh with 'zsh'"
