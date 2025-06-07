@@ -65,8 +65,8 @@ else
     cat << 'EOF' >> ~/.zshrc
 
 # Custom Zsh prompt with date, time, user@host, and cwd
-PROMPT="%F{green}[%D{%a %b %d} %*]%f-%F{yellow}%n%f@%F{red}%m%f
-%F{blue}[%~]%f\$ "
+autoload -Uz add-zsh-hook  # Ensure prompt-related functions are available
+PROMPT='%F{green}[%D{%a %b %d} %T]%f %F{yellow}%n%f@%F{red}%m%f %F{blue}[%~]%f \$ '
 EOF
     echo "Custom prompt added to .zshrc."
 fi
