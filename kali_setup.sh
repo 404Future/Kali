@@ -33,7 +33,7 @@ if dpkg -l | grep -q spice-vdagent; then
 else
     if ! sudo apt install -y spice-vdagent; then
         echo "Error: Failed to install spice-vdagent. Check logs or internet."
-        exit Cant 1
+        exit 1
     fi
     echo "spice-vdagent installed successfully."
 fi
@@ -73,6 +73,7 @@ sed -i '/toggle_oneline_prompt/d' ~/.zshrc
 sed -i '/zle -N toggle_oneline_prompt/d' ~/.zshrc
 sed -i '/bindkey \^P toggle_oneline_prompt/d' ~/.zshrc
 sed -i '/RPROMPT=/d' ~/.zshrc
+sed -i '/NEWLINE_BEFORE_PROMPT/d' ~/.zshrc
 
 # Append custom prompt to .zshrc
 echo "Adding custom prompt to .zshrc..."
