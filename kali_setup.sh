@@ -57,14 +57,21 @@ if [ -f ~/.zshrc ]; then
     echo "Backed up .zshrc to ~/.zshrc.bak-$(date +%Y%m%d-%H%M%S)"
 fi
 
-# Remove old custom prompt and Kali default prompt settings
-if grep -q "Custom Zsh prompt" ~/.zshrc || grep -q "configure_prompt" ~/.zshrc; then
-    echo "Removing old custom and Kali default prompt settings from .zshrc..."
-    sed -i '/# Custom Zsh prompt/,/\$/d' ~/.zshrc
-    sed -i '/configure_prompt()/d' ~/.zshrc
-    sed -i '/PROMPT_ALTERNATIVE=/d' ~/.zshrc
-    sed -i '/START KALI CONFIG VARIABLES/,/STOP KALI CONFIG VARIABLES/d' ~/.zshrc
-fi
+# Remove all conflicting prompt settings
+echo "Removing old and conflicting prompt settings from .zshrc..."
+sed -i '/# Custom Zsh prompt/,/\$/d' ~/.zshrc
+sed -i '/configure_prompt()/d' ~/.zshrc
+sed -i '/PROMPT_ALTERNATIVE=/d' ~/.zshrc
+sed -i '/START KALI CONFIG VARIABLES/,/STOP KALI CONFIG VARIABLES/d' ~/.zshrc
+sed -i '/prompt_symbol=/d' ~/.zshrc
+sed -i '/case "$PROMPT_ALTERNATIVE" in/,/esac/d' ~/.zshrc
+sed -i '/PROMPT=/d' ~/.zshrc
+sed -i '/if \[ "$color_prompt" = yes \] then/,/else/d' ~/.zshrc
+sed -i '/color_prompt=/d' ~/.zshrc
+sed -i '/force_color_prompt=/d' ~/.zshrc
+sed -i '/toggle_oneline_prompt()/d' ~/.zshrc
+sed -i '/zle -N toggle_oneline_prompt/d' ~/.zshrc
+sed -i '/bindkey \^P toggle_oneline_prompt/d' ~/.zshrc
 
 # Append custom prompt to .zshrc
 cat << 'EOF' >> ~/.zshrc
