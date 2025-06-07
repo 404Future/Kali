@@ -57,10 +57,13 @@ if [ -f ~/.zshrc ]; then
     echo "Backed up .zshrc to ~/.zshrc.bak-$(date +%Y%m%d-%H%M%S)"
 fi
 
-# Remove old custom prompt if it exists, then add new one
-if grep -q "Custom Zsh prompt" ~/.zshrc; then
-    echo "Removing old custom prompt from .zshrc..."
+# Remove old custom prompt and Kali default prompt settings
+if grep -q "Custom Zsh prompt" ~/.zshrc || grep -q "configure_prompt" ~/.zshrc; then
+    echo "Removing old custom and Kali default prompt settings from .zshrc..."
     sed -i '/# Custom Zsh prompt/,/\$/d' ~/.zshrc
+    sed -i '/configure_prompt()/d' ~/.zshrc
+    sed -i '/PROMPT_ALTERNATIVE=/d' ~/.zshrc
+    sed -i '/START KALI CONFIG VARIABLES/,/STOP KALI CONFIG VARIABLES/d' ~/.zshrc
 fi
 
 # Append custom prompt to .zshrc
