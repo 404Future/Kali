@@ -38,4 +38,12 @@ else
     echo "spice-vdagent installed successfully."
 fi
 
+# Step 3: Clean up unused packages
+echo "Cleaning up unnecessary packages..."
+if ! sudo apt autoremove -y; then
+    echo "Warning: Failed to autoremove packages. You may need to clean up manually."
+else
+    echo "Unused packages removed."
+fi
+
 echo "Kali setup complete at $(date)."
